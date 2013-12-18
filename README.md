@@ -4,6 +4,7 @@ Pygments.php - A Thin Wrapper for the Python Pygments
 [![Latest Stable Version](https://poser.pugx.org/kzykhys/pygments/v/stable.png)](https://packagist.org/packages/kzykhys/pygments)
 [![Build Status](https://travis-ci.org/kzykhys/Pygments.php.png?branch=master)](https://travis-ci.org/kzykhys/Pygments.php)
 [![Coverage Status](https://coveralls.io/repos/kzykhys/Pygments.php/badge.png)](https://coveralls.io/r/kzykhys/Pygments.php)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8179bad3-5612-49d7-aa18-be4ae4b7b820/mini.png)](https://insight.sensiolabs.com/projects/8179bad3-5612-49d7-aa18-be4ae4b7b820)
 
 A PHP wrapper for the Python Pygments syntax highlighter
 
