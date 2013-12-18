@@ -53,7 +53,7 @@ class Pygments
         }
 
         if (count($options)) {
-            $arg = [];
+            $arg = array();
 
             foreach ($options as $key => $value) {
                 $arg[] = sprintf('%s=%s', $key, $value);
