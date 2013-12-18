@@ -6,6 +6,8 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
+ * Pygments.php - A Thin Wrapper for the Python Pygments
+ *
  * @author Kazuyuki Hayashi <hayashi@valnur.net>
  */
 class Pygments
@@ -17,7 +19,9 @@ class Pygments
     private $pygmentize;
 
     /**
-     * @param string $pygmentize
+     * Constructor
+     *
+     * @param string $pygmentize The path to pygmentize command
      */
     public function __construct($pygmentize = 'pygmentize')
     {
@@ -27,10 +31,10 @@ class Pygments
     /**
      * Highlight the input code
      *
-     * @param string $code
-     * @param string $lexer
-     * @param string $formatter
-     * @param array  $options
+     * @param string $code      The code to highlight
+     * @param string $lexer     The name of the lexer (php, html,...)
+     * @param string $formatter The name of the formatter (html, ansi,...)
+     * @param array  $options   An array of options
      *
      * @return string
      */
@@ -58,15 +62,16 @@ class Pygments
             $builder->add('-O')->add(implode(',', $arg));
         }
 
-        $process = $builder->getProcess();
-        $process->setStdin($code);
+        $process = $builder->getProcess()->setStdin($code);
 
         return $this->getOutput($process);
     }
 
     /**
-     * @param string $style
-     * @param null   $selector
+     * Gets style definition
+     *
+     * @param string $style    The name of the style (default, colorful,...)
+     * @param string $selector The css selector
      *
      * @return string
      */
@@ -84,7 +89,9 @@ class Pygments
     }
 
     /**
-     * @param $fileName
+     * Guesses a lexer name based solely on the given filename
+     *
+     * @param string $fileName The file does not need to exist, or be readable.
      *
      * @return string
      */
@@ -98,6 +105,8 @@ class Pygments
     }
 
     /**
+     * Gets a list of lexers
+     *
      * @return array
      */
     public function getLexers()
@@ -112,6 +121,8 @@ class Pygments
     }
 
     /**
+     * Gets a list of formatters
+     *
      * @return array
      */
     public function getFormatters()
@@ -126,6 +137,8 @@ class Pygments
     }
 
     /**
+     * Gets a list of styles
+     *
      * @return array
      */
     public function getStyles()
@@ -149,7 +162,6 @@ class Pygments
 
     /**
      * @param Process $process
-     *
      * @throws \RuntimeException
      * @return string
      */
@@ -165,8 +177,7 @@ class Pygments
     }
 
     /**
-     * @param $input
-     *
+     * @param string $input
      * @return array
      */
     protected function parseList($input)
