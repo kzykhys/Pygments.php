@@ -101,7 +101,7 @@ class Pygments
             ->setArguments(array('-N', $fileName))
             ->getProcess();
 
-        return $this->getOutput($process);
+        return trim($this->getOutput($process));
     }
 
     /**
