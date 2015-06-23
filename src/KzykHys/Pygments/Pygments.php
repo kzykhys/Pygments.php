@@ -53,13 +53,9 @@ class Pygments
         }
 
         if (count($options)) {
-            $arg = array();
-
             foreach ($options as $key => $value) {
-                $arg[] = sprintf('%s=%s', $key, $value);
+                $builder->add('-P')->add(sprintf('%s=%s', $key, $value));
             }
-
-            $builder->add('-O')->add(implode(',', $arg));
         }
 
         $process = $builder->getProcess()->setStdin($code);
