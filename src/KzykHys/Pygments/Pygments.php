@@ -62,7 +62,7 @@ class Pygments
             $builder->add('-O')->add(implode(',', $arg));
         }
 
-        $process = $builder->getProcess()->setStdin($code);
+        $process = $builder->setInput($code)->getProcess();
 
         return $this->getOutput($process);
     }
