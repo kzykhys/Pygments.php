@@ -58,7 +58,7 @@ class Pygments
             }
         }
 
-        $process = $builder->getProcess()->setStdin($code);
+        $process = $builder->setInput($code)->getProcess();
 
         return $this->getOutput($process);
     }
