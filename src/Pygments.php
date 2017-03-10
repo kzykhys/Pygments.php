@@ -192,5 +192,4 @@ class Pygments
 
         return $list;
     }
-
-} 
+}

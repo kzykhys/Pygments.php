@@ -115,5 +115,4 @@ class PygmentsTest extends TestCase
 
         return $css;
     }
-
 }

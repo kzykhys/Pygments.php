@@ -27,6 +27,7 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
+  - ./vendor/bin/phpcs src tests --standard=psr2 -sp
 
 after_success:
   - travis_retry php vendor/bin/coveralls
