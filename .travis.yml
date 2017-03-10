@@ -1,5 +1,7 @@
 language: php
 
+sudo: required
+
 php:
   - 7.1
   - 7.0
@@ -10,19 +12,23 @@ php:
   - hhvm
   - nightly
 
-sudo: required
+matrix:
+  allow_failures:
+    - php: nightly
 
 before_install:
   - sudo pip install --upgrade pip
   - sudo pip install Pygments==1.6
+  - travis_retry composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist
 
 before_script:
-  - composer require --no-update satooshi/php-coveralls:0.6.1
-  - composer update --dev --no-interaction
+  - mkdir -p build/logs
 
 script:
-  - mkdir -p build/logs
-  - ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+  - ./vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
 
-after_script:
-  - php vendor/bin/coveralls
+after_success:
+  - travis_retry php vendor/bin/coveralls
