@@ -3,12 +3,13 @@
 namespace KzykHys\Pygments\Test;
 
 use KzykHys\Pygments\Pygments;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @author Kazuyuki Hayashi <hayashi@valnur.net>
  */
-class PygmentsTest extends \PHPUnit_Framework_TestCase
+class PygmentsTest extends TestCase
 {
 
     /**
