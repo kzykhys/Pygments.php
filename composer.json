@@ -15,6 +15,7 @@
         "symfony/process": "^3.0"
     },
     "require-dev": {
+        "jakub-onderka/php-parallel-lint": "^0.9.2",
         "phpunit/phpunit": "^5.7 || ^6.0",
         "squizlabs/php_codesniffer": "^2.8",
         "symfony/finder": "^3.0"
@@ -30,7 +31,13 @@
         }
     },
     "scripts": {
+        "lint": "parallel-lint src tests",
         "phpunit": "phpunit --verbose --colors=always",
-        "phpcs": "phpcs src tests --standard=psr2 -sp --colors"
+        "phpcs": "phpcs src tests --standard=psr2 -sp --colors",
+        "test": [
+            "@lint",
+            "@phpunit",
+            "@phpcs"
+        ]
     }
 }
