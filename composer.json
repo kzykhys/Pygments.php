@@ -20,8 +20,13 @@
         "symfony/finder": "^2.3"
     },
     "autoload": {
-        "psr-0": {
-            "": "src"
+        "psr-4": {
+            "KzykHys\\Pygments\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "KzykHys\\Pygments\\Test\\": "tests"
         }
     }
 }

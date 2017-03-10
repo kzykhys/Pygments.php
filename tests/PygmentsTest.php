@@ -1,12 +1,14 @@
 <?php
 
+namespace KzykHys\Pygments\Test;
+
 use KzykHys\Pygments\Pygments;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @author Kazuyuki Hayashi <hayashi@valnur.net>
  */
-class PygmentsTest extends PHPUnit_Framework_TestCase
+class PygmentsTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -113,4 +115,4 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
         return $css;
     }
 
-} 
+}
