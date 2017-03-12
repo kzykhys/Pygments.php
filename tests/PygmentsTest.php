@@ -14,11 +14,11 @@ class PygmentsTest extends TestCase
     /**
      * @dataProvider provideSamples
      */
-    public function testHighlight($input, $expected, $expectedL, $lexer)
+    public function testHighlight($input, $expected, $expectedL, $expectedG, $lexer)
     {
         $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
-        $this->assertEquals($expected, $pygments->highlight($input, null, 'html'));
+        $this->assertEquals($expectedG, $pygments->highlight($input, null, 'html'));
         $this->assertEquals($expected, $pygments->highlight($input, $lexer, 'html'));
         $this->assertEquals($expectedL, $pygments->highlight($input, null, 'html', array('linenos' => 1)));
     }
@@ -72,7 +72,6 @@ class PygmentsTest extends TestCase
         $finder
             ->in(__DIR__ . '/Resources/pygments-' . getenv('PYGMENTIZE_VERSION') . '/example')
             ->name("*.in")
-            ->notName('*.linenos.out')
             ->files()
             ->ignoreVCS(true);
 
@@ -84,6 +83,7 @@ class PygmentsTest extends TestCase
                 $file->getContents(),
                 file_get_contents(str_replace('.in', '.out', $file->getPathname())),
                 file_get_contents(str_replace('.in', '.linenos.out', $file->getPathname())),
+                file_get_contents(str_replace('.in', '.guess.out', $file->getPathname())),
                 preg_replace('/\..*/', '', $file->getFilename())
             );
         }
