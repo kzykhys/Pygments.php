@@ -3,8 +3,12 @@ language: python
 sudo: false
 
 python:
+  - 2.6
   - 2.7
-  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
 
 env:
   global:
@@ -22,15 +26,16 @@ env:
     - PHP_VERSION=5.6 PYGMENTS_VERSION=2.0
     - PHP_VERSION=5.6 PYGMENTS_VERSION=2.1
     - PHP_VERSION=5.6 PYGMENTS_VERSION=2.2
-    - PHP_VERSION=nightly PYGMENTS_VERSION=1.6
-    - PHP_VERSION=nightly PYGMENTS_VERSION=2.0
-    - PHP_VERSION=nightly PYGMENTS_VERSION=2.1
-    - PHP_VERSION=nightly PYGMENTS_VERSION=2.2
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - env: PHP_VERSION=nightly
+  include:
+    - python: 3.2
+      env: PHP_VERSION=7.1 PYGMENTS_VERSION=1.6
+    - python: 3.2
+      env: PHP_VERSION=7.0 PYGMENTS_VERSION=1.6
+    - python: 3.2
+      env: PHP_VERSION=5.6 PYGMENTS_VERSION=1.6
 
 addons:
   apt:
