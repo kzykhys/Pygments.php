@@ -1,21 +1,74 @@
-language: php
+language: python
 
-php:
-  - 5.5
-  - 5.4
-  - 5.3
+sudo: false
+
+python:
+  - 2.6
+  - 2.7
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+
+env:
+  global:
+    - PATH="$HOME/.phpenv/bin:$HOME/.phpenv/shims:$PATH"
+  matrix:
+    - PHP_VERSION=7.1 PYGMENTS_VERSION=1.6
+    - PHP_VERSION=7.1 PYGMENTS_VERSION=2.0
+    - PHP_VERSION=7.1 PYGMENTS_VERSION=2.1
+    - PHP_VERSION=7.1 PYGMENTS_VERSION=2.2
+    - PHP_VERSION=7.0 PYGMENTS_VERSION=1.6
+    - PHP_VERSION=7.0 PYGMENTS_VERSION=2.0
+    - PHP_VERSION=7.0 PYGMENTS_VERSION=2.1
+    - PHP_VERSION=7.0 PYGMENTS_VERSION=2.2
+    - PHP_VERSION=5.6 PYGMENTS_VERSION=1.6
+    - PHP_VERSION=5.6 PYGMENTS_VERSION=2.0
+    - PHP_VERSION=5.6 PYGMENTS_VERSION=2.1
+    - PHP_VERSION=5.6 PYGMENTS_VERSION=2.2
+
+matrix:
+  fast_finish: true
+  include:
+    - python: 3.2
+      env: PHP_VERSION=7.1 PYGMENTS_VERSION=1.6
+    - python: 3.2
+      env: PHP_VERSION=7.0 PYGMENTS_VERSION=1.6
+    - python: 3.2
+      env: PHP_VERSION=5.6 PYGMENTS_VERSION=1.6
+  allow_failures:
+    - python: 2.6
+      env: PHP_VERSION=7.1 PYGMENTS_VERSION=2.2
+    - python: 2.6
+      env: PHP_VERSION=7.0 PYGMENTS_VERSION=2.2
+    - python: 2.6
+      env: PHP_VERSION=5.6 PYGMENTS_VERSION=2.2
+
+addons:
+  apt:
+    packages:
+      - libc-client-dev
+      - libtidy-dev
+      - libmcrypt-dev
 
 before_install:
-  - sudo easy_install Pygments
+  - ./util/install-php.sh
+  - eval "$(phpenv init -)" && phpenv rehash
+  - php --version
+  - php composer.phar --version
+
+install:
+  - travis_retry pip install Pygments==$PYGMENTS_VERSION
+  - travis_retry php composer.phar require --no-update satooshi/php-coveralls:^1.0
+  - travis_retry php composer.phar install --no-interaction --prefer-dist
 
 before_script:
-  - composer require --no-update satooshi/php-coveralls:dev-master sensiolabs/security-checker:dev-master
-  - composer update --dev --no-interaction
+  - mkdir -p build/logs
 
 script:
-  - mkdir -p build/logs
-  - phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
-  - php vendor/bin/security-checker security:check composer.lock
+  - ./vendor/bin/parallel-lint src tests
+  - ./vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
+  - ./vendor/bin/phpcs src tests --standard=psr2 -sp
 
-after_script:
-  - php vendor/bin/coveralls
+after_success:
+  - travis_retry php vendor/bin/coveralls

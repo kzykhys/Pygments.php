@@ -1,24 +1,26 @@
 <?php
 
+namespace KzykHys\Pygments\Test;
+
 use KzykHys\Pygments\Pygments;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @author Kazuyuki Hayashi <hayashi@valnur.net>
  */
-class PygmentsTest extends PHPUnit_Framework_TestCase
+class PygmentsTest extends TestCase
 {
-
     /**
      * @dataProvider provideSamples
      */
-    public function testHighlight($input, $expected, $expectedL, $lexer)
+    public function testHighlight($input, $expected, $expectedL, $expectedG, $lexer)
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
-        $this->assertEquals($expected, $pygments->highlight($input, null, 'html'));
+        $this->assertEquals($expectedG, $pygments->highlight($input, null, 'html'));
         $this->assertEquals($expected, $pygments->highlight($input, $lexer, 'html'));
-        $this->assertEquals($expectedL, $pygments->highlight($input, null, 'html', array('linenos' => 1)));
+        $this->assertEquals($expectedL, $pygments->highlight($input, null, 'html', ['linenos' => 1]));
     }
 
     /**
@@ -26,7 +28,7 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCss($expected, $expectedA, $style)
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
         $this->assertEquals($expected, $pygments->getCss($style));
         $this->assertEquals($expectedA, $pygments->getCss($style, '.syntax'));
@@ -34,7 +36,7 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
 
     public function testGetLexers()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $lexers = $pygments->getLexers();
 
         $this->assertArrayHasKey('python', $lexers);
@@ -42,7 +44,7 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
 
     public function testGetFormatters()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $formatters = $pygments->getFormatters();
 
         $this->assertArrayHasKey('html', $formatters);
@@ -50,7 +52,7 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
 
     public function testGetStyles()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $styles = $pygments->getStyles();
 
         $this->assertArrayHasKey('monokai', $styles);
@@ -58,7 +60,7 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
 
     public function testGuessLexer()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
         $this->assertEquals('php', $pygments->guessLexer('index.php'));
         $this->assertEquals('go', $pygments->guessLexer('main.go'));
@@ -68,22 +70,22 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
     {
         $finder = new Finder();
         $finder
-            ->in(__DIR__ . '/Resources/example')
+            ->in(__DIR__ . '/Resources/pygments-' . getenv('PYGMENTIZE_VERSION') . '/example')
             ->name("*.in")
-            ->notName('*.linenos.out')
             ->files()
             ->ignoreVCS(true);
 
-        $samples = array();
+        $samples = [];
 
         /* @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
-            $samples[] = array(
+            $samples[] = [
                 $file->getContents(),
                 file_get_contents(str_replace('.in', '.out', $file->getPathname())),
                 file_get_contents(str_replace('.in', '.linenos.out', $file->getPathname())),
-                preg_replace('/\..*/', '', $file->getFilename())
-            );
+                file_get_contents(str_replace('.in', '.guess.out', $file->getPathname())),
+                preg_replace('/\..*/', '', $file->getFilename()),
+            ];
         }
 
         return $samples;
@@ -93,24 +95,23 @@ class PygmentsTest extends PHPUnit_Framework_TestCase
     {
         $finder = new Finder();
         $finder
-            ->in(__DIR__ . '/Resources/css')
+            ->in(__DIR__ . '/Resources/pygments-' . getenv('PYGMENTIZE_VERSION') . '/css')
             ->files()
             ->ignoreVCS(true)
             ->name('*.css')
             ->notName('*.prefix.css');
 
-        $css = array();
+        $css = [];
 
         /* @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
-            $css[] = array(
+            $css[] = [
                 $file->getContents(),
                 file_get_contents(str_replace('.css', '.prefix.css', $file->getPathname())),
-                str_replace('.css', '', $file->getFilename())
-            );
+                str_replace('.css', '', $file->getFilename()),
+            ];
         }
 
         return $css;
     }
-
-} 
+}
