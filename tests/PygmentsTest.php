@@ -20,7 +20,7 @@ class PygmentsTest extends TestCase
 
         $this->assertEquals($expectedG, $pygments->highlight($input, null, 'html'));
         $this->assertEquals($expected, $pygments->highlight($input, $lexer, 'html'));
-        $this->assertEquals($expectedL, $pygments->highlight($input, null, 'html', array('linenos' => 1)));
+        $this->assertEquals($expectedL, $pygments->highlight($input, null, 'html', ['linenos' => 1]));
     }
 
     /**
@@ -75,17 +75,17 @@ class PygmentsTest extends TestCase
             ->files()
             ->ignoreVCS(true);
 
-        $samples = array();
+        $samples = [];
 
         /* @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
-            $samples[] = array(
+            $samples[] = [
                 $file->getContents(),
                 file_get_contents(str_replace('.in', '.out', $file->getPathname())),
                 file_get_contents(str_replace('.in', '.linenos.out', $file->getPathname())),
                 file_get_contents(str_replace('.in', '.guess.out', $file->getPathname())),
-                preg_replace('/\..*/', '', $file->getFilename())
-            );
+                preg_replace('/\..*/', '', $file->getFilename()),
+            ];
         }
 
         return $samples;
@@ -101,15 +101,15 @@ class PygmentsTest extends TestCase
             ->name('*.css')
             ->notName('*.prefix.css');
 
-        $css = array();
+        $css = [];
 
         /* @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
-            $css[] = array(
+            $css[] = [
                 $file->getContents(),
                 file_get_contents(str_replace('.css', '.prefix.css', $file->getPathname())),
-                str_replace('.css', '', $file->getFilename())
-            );
+                str_replace('.css', '', $file->getFilename()),
+            ];
         }
 
         return $css;
