@@ -11,13 +11,12 @@ use Symfony\Component\Finder\Finder;
  */
 class PygmentsTest extends TestCase
 {
-
     /**
      * @dataProvider provideSamples
      */
     public function testHighlight($input, $expected, $expectedL, $lexer)
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
         $this->assertEquals($expected, $pygments->highlight($input, null, 'html'));
         $this->assertEquals($expected, $pygments->highlight($input, $lexer, 'html'));
@@ -29,7 +28,7 @@ class PygmentsTest extends TestCase
      */
     public function testGetCss($expected, $expectedA, $style)
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
         $this->assertEquals($expected, $pygments->getCss($style));
         $this->assertEquals($expectedA, $pygments->getCss($style, '.syntax'));
@@ -37,7 +36,7 @@ class PygmentsTest extends TestCase
 
     public function testGetLexers()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $lexers = $pygments->getLexers();
 
         $this->assertArrayHasKey('python', $lexers);
@@ -45,7 +44,7 @@ class PygmentsTest extends TestCase
 
     public function testGetFormatters()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $formatters = $pygments->getFormatters();
 
         $this->assertArrayHasKey('html', $formatters);
@@ -53,7 +52,7 @@ class PygmentsTest extends TestCase
 
     public function testGetStyles()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
         $styles = $pygments->getStyles();
 
         $this->assertArrayHasKey('monokai', $styles);
@@ -61,7 +60,7 @@ class PygmentsTest extends TestCase
 
     public function testGuessLexer()
     {
-        $pygments = new Pygments();
+        $pygments = new Pygments(getenv('PYGMENTIZE_PATH'));
 
         $this->assertEquals('php', $pygments->guessLexer('index.php'));
         $this->assertEquals('go', $pygments->guessLexer('main.go'));
@@ -71,7 +70,7 @@ class PygmentsTest extends TestCase
     {
         $finder = new Finder();
         $finder
-            ->in(__DIR__ . '/Resources/example')
+            ->in(__DIR__ . '/Resources/pygments-' . getenv('PYGMENTIZE_VERSION') . '/example')
             ->name("*.in")
             ->notName('*.linenos.out')
             ->files()
@@ -96,7 +95,7 @@ class PygmentsTest extends TestCase
     {
         $finder = new Finder();
         $finder
-            ->in(__DIR__ . '/Resources/css')
+            ->in(__DIR__ . '/Resources/pygments-' . getenv('PYGMENTIZE_VERSION') . '/css')
             ->files()
             ->ignoreVCS(true)
             ->name('*.css')
