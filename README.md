@@ -6,26 +6,22 @@ Pygments.php - A Thin Wrapper for the Python Pygments
 [![Coverage Status](https://coveralls.io/repos/kzykhys/Pygments.php/badge.png)](https://coveralls.io/r/kzykhys/Pygments.php)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/3efddd61-f6e2-4f4a-949d-9ca7230f6e56/mini.png)](https://insight.sensiolabs.com/projects/3efddd61-f6e2-4f4a-949d-9ca7230f6e56)
 
-A PHP wrapper for the [Pygments](http://pygments.org/), the Python syntax highlighter.
+A PHP wrapper for [Pygments](http://pygments.org/), the Python syntax highlighter.
 
 Requirements
 ------------
 
-* PHP5.3+
-* Python 2.4+
-* Pygments (`sudo easy_install Pygments`)
+* PHP 5.6+
+* Python 2.7+
+* Pygments 1.6+ (`pip install Pygments`)
 
 Installation
 ------------
 
-Create or update your composer.json and run `composer update`
+Use [Composer](https://getcomposer.org) to require this package:
 
-``` json
-{
-    "require": {
-        "kzykhys/pygments": ">=1.0"
-    }
-}
+```
+composer require kzykhys/pygments
 ```
 
 Usage
